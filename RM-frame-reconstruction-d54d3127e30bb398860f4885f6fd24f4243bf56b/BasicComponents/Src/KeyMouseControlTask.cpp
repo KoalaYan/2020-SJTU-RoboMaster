@@ -21,7 +21,7 @@ void Remote::KeyMouseControl() {
     static WorkState_e lastWorkState = NORMAL_STATE;
     if (workState <= 0) return;
 	  if (channel.rrow >400){
-				__HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_3,1800);    //use the clamp to hold the pipe
+				__HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_3,1500);    //use the clamp to hold the pipe
 	  }
 		else{
 				__HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_3,500);
