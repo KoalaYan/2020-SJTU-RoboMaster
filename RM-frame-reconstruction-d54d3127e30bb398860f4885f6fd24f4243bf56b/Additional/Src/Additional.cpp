@@ -14,8 +14,8 @@ void Additional::Reset() {
 	  initRecvUart();
 	  initVisionRecvUart();
     M2006.Reset(CAN_TYPE_1, 0x206, 36,
-                8.2, 0.2, 5, 1580.0, 1080.0, 1080.0, 2000.0,
-                15.0, 0.01, 0.5, 1000.0, 5000.0, 10000.0, 10000.0);
+                30, 0, 5, 1580.0, 1080.0, 1080.0, 2000.0,
+                300.0, 0, 1, 1000.0, 5000.0, 10000.0, 10000.0);
 		//Reset(CanType_e can, uint16_t _RxID, double _reductionRate, double _kp = 8.0, double _ki = 0.2, double _kd = 5, double _pMax, double _iMax,
     //              double _dMax, double _max)
 }
@@ -32,8 +32,10 @@ void Additional::setTargetAngle(int16_t Angle) {
 			M2006.targetAngle = Angle;
 		}
 	*/
-	if (M2006.targetAngle>180) {
-		M2006.targetAngle = M2006.targetAngle-10;
+	//int nowAngle = int(M2006.GetRealAngle());
+	
+	if (M2006.GetRealAngle()>180) {
+		M2006.targetAngle = M2006.GetRealAngle()-10;
 	}
 	else {
 		M2006.targetAngle = Angle;
@@ -43,8 +45,8 @@ void Additional::setTargetAngle(int16_t Angle) {
 
 void Additional::setRotate() {
 		//mode 0: directly add angle every time
-		if(M2006.targetAngle<1800)
-				M2006.targetAngle = M2006.targetAngle+10;
+		//if(M2006.GetRealAngle()<1800)
+		M2006.targetAngle = M2006.GetRealAngle()+10;
 		
 		
 		//mode 1: sine function
