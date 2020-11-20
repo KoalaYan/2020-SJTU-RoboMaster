@@ -17,20 +17,29 @@
 
 int16_t speed = 0;
 
+bool flag_clamp = true;
 void Remote::KeyMouseControl() {
     static WorkState_e lastWorkState = NORMAL_STATE;
     if (workState <= 0) return;
-	  if (channel.rrow >400){
-				__HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_3,1500);    //use the clamp to hold the pipe
-	  }
-		else{
-				__HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_3,500);
-		}
+	  
 		
 	  if (workState == NORMAL_STATE){                         
 				Additional::additional.setTargetAngle(120);          //hang up 70mm (maybe 120 perform better
 		}			
     else if (workState == ADDITIONAL_STATE_ONE){  
+				if(flag_clamp){
+						if (channel.rrow >400){
+								__HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_3,1500);    //use the clamp to hold the pipe
+								flag_clamp = false;
+						}						
+				}				
+				else{
+						if (channel.rrow <-400) {
+								__HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_3,500);
+								flag_clamp = true;
+						}
+				}
+				
 				Additional::additional.setTargetAngle(0);
 				if (channel.lcol>400){																		//open gate1 to put small balls
 						__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_3,500);

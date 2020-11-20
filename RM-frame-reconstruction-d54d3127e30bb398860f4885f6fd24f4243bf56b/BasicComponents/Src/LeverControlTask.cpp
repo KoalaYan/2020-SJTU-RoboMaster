@@ -28,7 +28,7 @@ void Remote::LeverControl() {
 				Additional::additional.setTargetAngle(150); //to pass the hill
     } 
 		else if (workState == ADDITIONAL_STATE_ONE) { 
-				Additional::additional.setTargetAngle(0); //adjust the car position to fit clamp
+				Additional::additional.setTargetAngle(150); //adjust the car position to fit clamp
     } 
 		else if (workState == ADDITIONAL_STATE_TWO) {
 				if(flag_rc) {

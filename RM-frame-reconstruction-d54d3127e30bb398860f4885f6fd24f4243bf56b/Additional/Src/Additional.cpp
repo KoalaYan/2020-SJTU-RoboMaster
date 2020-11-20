@@ -14,12 +14,12 @@ void Additional::Reset() {
 	  initRecvUart();
 	  initVisionRecvUart();
     M2006.Reset(CAN_TYPE_1, 0x206, 36,
-                30, 0, 5, 1580.0, 1080.0, 1080.0, 2000.0,
-                300.0, 0, 1, 1000.0, 5000.0, 10000.0, 10000.0);
+                8.0, 0.2, 5, 1580.0, 1080.0, 1080.0, 2000.0,
+                15.0, 0, 0.3, 1000.0, 5000.0, 10000.0, 10000.0);
 		//Reset(CanType_e can, uint16_t _RxID, double _reductionRate, double _kp = 8.0, double _ki = 0.2, double _kd = 5, double _pMax, double _iMax,
     //              double _dMax, double _max)
 }
-
+int RealAngle;
 void Additional::setTargetAngle(int16_t Angle) {
 	/*
 	  double range = 10;
@@ -32,55 +32,90 @@ void Additional::setTargetAngle(int16_t Angle) {
 			M2006.targetAngle = Angle;
 		}
 	*/
-	//int nowAngle = int(M2006.GetRealAngle());
-	
+	RealAngle = int(M2006.GetRealAngle());
+	//int nowAngle = RealAngle % 360;
+	int sll = RealAngle / 360;
+	if(RealAngle - (sll*360+Angle) > 300){
+			sll++;
+	}
+	//int tarAngle = int(Angle) % 360;
+	if(RealAngle >= Angle+sll*360){
+			M2006.targetAngle = M2006.GetRealAngle()-10;
+	}
+	else{
+			M2006.targetAngle = sll * 360 + Angle;
+	}
+		/*
 	if (M2006.GetRealAngle()>180) {
-		M2006.targetAngle = M2006.GetRealAngle()-10;
+		
+			if(RealAngle >= Angle+sll*360){
+				M2006.targetAngle = M2006.GetRealAngle()-10;
+			}
+			else{
+				M2006.targetAngle = sll * 360;
+			}
+		
+		//M2006.targetAngle = sll * 360;
 	}
 	else {
-		M2006.targetAngle = Angle;
+			M2006.targetAngle = Angle;
 	}
+		*/
 }
 
 
 void Additional::setRotate() {
 		//mode 0: directly add angle every time
 		//if(M2006.GetRealAngle()<1800)
-		M2006.targetAngle = M2006.GetRealAngle()+10;
+	
+		/*
+		if(times % 10 == 0) {
+				times = 0;
+				if(lp==3){
+						lp = 0;
+						times++;
+				}
+				lp++;
+		}
+		else{
+				M2006.targetAngle = M2006.GetRealAngle()+10;
+				times++;
+		}
+	*/
 		
-		
+		/*
+		RealAngle = int(M2006.GetRealAngle());
+		M2006.targetAngle = RealAngle+10;
+		*/
 		//mode 1: sine function
 		/*
 	  double range = 10;
-		double inc = abs(sin(M2006.GetRealAngle())*sin(M2006.GetRealAngle())) * range + 0.5;
+		double inc = abs(sin(M2006.GetRealAngle())) * range + 0.5;
     M2006.targetAngle = M2006.targetAngle+inc;
 		*/
 	
-	/*
+	
 		//mode 2: Clockwise 180, stay and Counterclockwise 180
-		if (times % 3 == 0) {
-				if(ang == 18){
-						if(lp<5){
-								ang--;
-						}
-						else{
-								lp = 0;
-						}
-						lp++;
+		//int ang = round(M2006.GetRealAngle() / 10);
+		
+		
+		if(ang == 19){
+				if(lp<50){
+						ang--;
 				}
-				ang++;
-				times = 0;
-				times++;
-				
-		}
-		else{
-				times++;
+				else{
+						lp = 0;
+				}
+				lp++;
 		}
 		
-		ang %= 36;
-		int nowangle = 180 - 10 * abs(18-ang);
+		ang++;
+				
+		
+		ang %= 38;
+		int nowangle = 190 - 10 * abs(19-ang);
 		M2006.targetAngle = nowangle;
-		*/
+		
 		
 		//mode 3:
 		
