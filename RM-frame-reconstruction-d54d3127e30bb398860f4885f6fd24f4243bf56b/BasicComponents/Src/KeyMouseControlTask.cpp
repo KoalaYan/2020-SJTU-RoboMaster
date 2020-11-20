@@ -16,14 +16,17 @@
 #include "AutoAimTask.h"
 
 int16_t speed = 0;
-
+uint8_t wait_motor_get_down_flag = 1;
+uint8_t wait_steering_engine_flag = 1;
+uint32_t COUNTNUM = 30;
+uint32_t wait_motor_get_down_counter = COUNTNUM;
+uint32_t wait_steering_engine_counter = COUNTNUM;
 bool flag_clamp = true;
 void Remote::KeyMouseControl() {
     static WorkState_e lastWorkState = NORMAL_STATE;
-    if (workState <= 0) return;
+    if (workState <= 0) return;		
 	  
-		
-	  if (workState == NORMAL_STATE){                         
+		if (workState == NORMAL_STATE){                         
 				Additional::additional.setTargetAngle(120);          //hang up 70mm (maybe 120 perform better
 		}			
     else if (workState == ADDITIONAL_STATE_ONE){  
@@ -41,23 +44,12 @@ void Remote::KeyMouseControl() {
 				}
 				
 				Additional::additional.setTargetAngle(0);
-				if (channel.lcol>400){																		//open gate1 to put small balls
-						__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_3,500);
-				}
-				else{                                                     //open gate2 to put big balls
-						__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_3,1000);
-				}
-				
-				if (channel.rcol>400){                                    //open the outside gate
-						__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_4,1500);
-				}
-				else{                                                     //close the outside gate
-						__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_4,500);
-				}
+
     }
 		else if (workState == ADDITIONAL_STATE_TWO){            
 				Additional::additional.setRotate();                
 		}
+	
     lastWorkState = workState;
 }
 
