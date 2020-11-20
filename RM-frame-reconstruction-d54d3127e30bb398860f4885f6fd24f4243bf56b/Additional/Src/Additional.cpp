@@ -52,7 +52,7 @@ void Additional::setRotate() {
 		//mode 1: sine function
 		/*
 	  double range = 10;
-		double inc = abs(sin(2*M2006.targetAngle)*sin(2*M2006.targetAngle)) * range + 0.5;
+		double inc = abs(sin(M2006.GetRealAngle())*sin(M2006.GetRealAngle())) * range + 0.5;
     M2006.targetAngle = M2006.targetAngle+inc;
 		*/
 	
