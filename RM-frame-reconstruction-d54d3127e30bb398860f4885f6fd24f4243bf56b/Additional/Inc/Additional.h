@@ -11,6 +11,9 @@ class Additional {
 public:
     static Additional additional;
     NormalMotor M2006;
+		int times = 0;
+		int ang = 0;
+		int lp = 0;
 
     void Handle();
 

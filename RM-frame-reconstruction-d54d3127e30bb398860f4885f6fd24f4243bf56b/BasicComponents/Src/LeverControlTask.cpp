@@ -19,8 +19,6 @@
 void Remote::LeverControl() {
     static WorkState_e lastWorkState = NORMAL_STATE;
     if (workState <= 0) return;
-    
-	  sendNumber(number);
     Chassis::chassis.SetVelocity(channel.rcol, channel.rrow, channel.lrow * 5);   //control car driving
 		
 		__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_3,1000);
@@ -32,8 +30,11 @@ void Remote::LeverControl() {
 		else if (workState == ADDITIONAL_STATE_ONE) { 
 				Additional::additional.setTargetAngle(0); //adjust the car position to fit clamp
     } 
-		else if (workState == ADDITIONAL_STATE_TWO) {    
-			  
+		else if (workState == ADDITIONAL_STATE_TWO) {
+				if(flag_rc) {
+						sendNumber(vsMsg);
+						flag_rc = false;
+				}
     }
     lastWorkState = workState;
 }

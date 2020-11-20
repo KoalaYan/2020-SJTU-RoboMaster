@@ -84,10 +84,12 @@ uint8_t visionMsg[8];
 uint8_t numberMsg[2];
 
 uint8_t number;
+
 uint8_t recvIndex = 0;
 
 uint8_t visualResult;
 
+bool flag_rc = false;
 
 int32_t lockCounter = 0;
 
@@ -105,24 +107,27 @@ void initRecvUart(void) {
     if (HAL_UART_Receive_IT(&RECV_UART, &tmpMsg, 1) != HAL_OK) {
         Error_Handler();
     }
-//    if (HAL_UART_Receive_IT(&VISUAL_UART, &visualResult, 1) != HAL_OK) {
-//        Error_Handler();
-//    }
+}
+
+void initVisionRecvUart(void) {
+		if (HAL_UART_Receive_IT(&VISION_UART, &vsMsg, 1) != HAL_OK) {
+        Error_Handler();
+    }
 }
 
 void sendNumber(uint8_t number) {
-    numberMsg[0] = '@';
+		numberMsg[0] = '@';
     numberMsg[1] = number;
+		//HAL_UART_Transmit(....);
     if (HAL_UART_Transmit_IT(&RECV_UART, numberMsg, 2) != HAL_OK) {
         Error_Handler();
     }
 }
 
 void VisionRxCpltCallback() {
-    visionMsg[recvIndex] = vsMsg;
-    recvIndex = (recvIndex + 1) % 2;
-	  if (recvIndex == 1 && visionMsg[0]=='@') number = visionMsg[1];
-	  if (HAL_UART_Receive_IT(&VISION_UART, &tmpMsg, 1) != HAL_OK) {
+	  //sendNumber(vsMsg);
+		flag_rc = true;
+		if (HAL_UART_Receive_IT(&VISION_UART, &vsMsg, 1) != HAL_OK) {
         Error_Handler();
     }
 }

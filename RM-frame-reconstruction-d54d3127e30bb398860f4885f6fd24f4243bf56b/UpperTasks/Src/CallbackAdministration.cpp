@@ -53,11 +53,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle) {
     if (UartHandle == &RECV_UART) {
         RecvRxCpltCallback();
     }
-		
-//    if (UartHandle == &AUTOAIM_UART) {
-//        AutoAim::autoAim.UartRxCpltCallback();
-//    }
-//    if (UartHandle == &JUDGE_UART) {
-//		JudgeUartRxCpltCallback();
-//    }
+		//huart7: receive
+		//huart6: transmit
+		if (UartHandle == &VISION_UART) {
+			  VisionRxCpltCallback();
+		}
 }

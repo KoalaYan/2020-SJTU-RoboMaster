@@ -20,7 +20,7 @@
 #define AUTOAIM_UART            huart6
 #define RECV_UART               huart6
 #define SERVO_UART				      huart7
-#define VISION_UART                 huart7
+#define VISION_UART             huart7
 
 #define INRANGE(NUM, MIN, MAX) \
 {\
