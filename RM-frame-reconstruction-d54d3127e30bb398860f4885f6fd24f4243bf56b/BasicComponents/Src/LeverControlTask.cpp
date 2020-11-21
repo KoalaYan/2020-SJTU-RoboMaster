@@ -44,7 +44,7 @@ void Remote::LeverControl() {
 		else if (workState == ADDITIONAL_STATE_ONE) {
 				__HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_3,500);
 				Chassis::chassis.SetVelocity(channel.rcol, channel.rrow, channel.lrow * 5);   //control car driving
-				//Additional::additional.setTargetAngle(150); //adjust the car position to fit clamp
+				Additional::additional.setTargetAngle(150); //adjust the car position to fit clamp
     } 
 		else if (workState == ADDITIONAL_STATE_TWO) {
 				//still useless
