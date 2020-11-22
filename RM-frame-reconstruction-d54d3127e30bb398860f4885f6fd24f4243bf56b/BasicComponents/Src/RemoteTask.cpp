@@ -62,8 +62,8 @@ void RemoteRecv::RemoteDataProcess(uint8_t *pData) {
     RC_CtrlData.rc.ch2 = (*(uint32_t*)&pData[2]>>(22-(2*8)))&0x7FF;
     RC_CtrlData.rc.ch3 = (*(uint32_t*)&pData[2]>>(33-(2*8)))&0x7FF;
     //8位无符号，低2位有效
-    RC_CtrlData.rc.s1  = (*(uint32_t*)&pData[5]>>(44-(5*8)))&0x03; // 档位开关
-    RC_CtrlData.rc.s2  = (*(uint32_t*)&pData[5]>>(46-(5*8)))&0x03; // 档位开关
+    RC_CtrlData.rc.s2  = (*(uint32_t*)&pData[5]>>(44-(5*8)))&0x03; // 档位开关
+    RC_CtrlData.rc.s1  = (*(uint32_t*)&pData[5]>>(46-(5*8)))&0x03; // 档位开关
     for(int i=0; i<10; i++)
     {
 			RC_CtrlData.rc.info[i]=pData[i+6]; // 使用手机外设时
