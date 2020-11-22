@@ -13,6 +13,7 @@ void Additional::Handle() {
 void Additional::Reset() {
 	  initRecvUart();
 	  initVisionRecvUart();
+		__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_4,500);
     M2006.Reset(CAN_TYPE_1, 0x206, 36,
                 8.0, 0.2, 5, 1580.0, 1080.0, 1080.0, 2000.0,
                 15.0, 0, 0.3, 1000.0, 5000.0, 10000.0, 10000.0);

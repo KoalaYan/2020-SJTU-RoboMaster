@@ -29,7 +29,9 @@ void Remote::KeyMouseControl() {
 		if (workState == NORMAL_STATE){                         
 				Additional::additional.setTargetAngle(120);          //hang up 70mm (maybe 120 perform better
 		}			
-    else if (workState == ADDITIONAL_STATE_ONE){  
+    else if (workState == ADDITIONAL_STATE_ONE){
+				
+				//sendNumber(0);
 				if(flag_clamp){
 						if (channel.rrow >400){
 								__HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_3,1500);    //use the clamp to hold the pipe

@@ -15,12 +15,10 @@
 #include "includes.h"
 
 #define USE_CHASSIS_FOLLOW
-
 void Remote::LeverControl() {
     static WorkState_e lastWorkState = NORMAL_STATE;
     if (workState <= 0) return;
     
-		
 		__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_3,1000);
 	  __HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_3,500); 
 	

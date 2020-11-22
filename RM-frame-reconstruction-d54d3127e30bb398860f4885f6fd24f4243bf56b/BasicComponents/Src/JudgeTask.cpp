@@ -116,16 +116,18 @@ void initVisionRecvUart(void) {
 }
 
 void sendNumber(uint8_t number) {
-		//numberMsg[0] = '@';
-    //numberMsg[1] = number;
-		//HAL_UART_Transmit(....);
-    if (HAL_UART_Transmit_IT(&RECV_UART, (uint8_t *) &number, 1) != HAL_OK) {
+		numberMsg[0] = '@';
+    numberMsg[1] = number;
+    if (HAL_UART_Transmit_IT(&RECV_UART, numberMsg, 2) != HAL_OK) { //这里需要改回中断。
         Error_Handler();
     }
 }
 
+
+
 void VisionRxCpltCallback() {
-	  sendNumber(vsMsg);
+		//if(vsMsg >= 0 && vsMsg < 7)
+		sendNumber(vsMsg);
 		//flag_rc = true;
 		if (HAL_UART_Receive_IT(&VISION_UART, &vsMsg, 1) != HAL_OK) {
         Error_Handler();

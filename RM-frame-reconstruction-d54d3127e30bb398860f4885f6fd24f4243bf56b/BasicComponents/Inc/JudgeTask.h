@@ -343,7 +343,6 @@ extern bool flag_rc;
 extern void sendNumber(uint8_t number);
 extern uint8_t vsMsg;
 extern uint8_t number;
-
 void sendNumber(uint8_t);
 void dealWithVisualResult();
 void initRecvUart();
