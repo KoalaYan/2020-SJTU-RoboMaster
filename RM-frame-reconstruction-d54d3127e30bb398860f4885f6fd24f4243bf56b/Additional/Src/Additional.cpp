@@ -122,13 +122,9 @@ void Additional::setRotate() {
 		
 }
 
-void Additional::remoteControl() {
-		if(flag < 1000){
-				//sendNumber(RC_CtrlData.rc.info[1]);
-				if(flag%100 == 0){
-						sendNumber(sdnm);
-						//sendNumber(0);
-				}
+void Additional::remoteControl(uint8_t num) {
+		if(flag < 1){
+				sendNumber(num);				
 				flag = flag + 1;
 		}
 }

@@ -15,7 +15,7 @@ public:
 		int ang = 0;
 		int lp = 0;
 		int flag;
-		int sdnm;
+		//uint8_t sdnm;
 
     void Handle();
 
@@ -25,7 +25,7 @@ public:
 
     void setTargetAngle(int16_t);
 
-		void remoteControl();
+		void remoteControl(uint8_t num);
 
 		void ResetFlag();
     

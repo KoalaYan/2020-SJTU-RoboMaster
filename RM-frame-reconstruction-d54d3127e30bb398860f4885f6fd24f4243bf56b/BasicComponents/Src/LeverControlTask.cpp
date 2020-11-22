@@ -38,8 +38,6 @@ void Remote::LeverControl() {
 						__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_4,500);
 				}
 				
-				Additional::additional.remoteControl();
-				Additional::additional.sdnm = RC_CtrlData.rc.info[1];
 				//useless
 				//Additional::additional.setTargetAngle(150); //to pass the hill
     } 
@@ -57,13 +55,33 @@ void Remote::LeverControl() {
 				Additional::additional.setTargetAngle(150); //adjust the car position to fit clamp
     }
 		else if (workState == ADDITIONAL_STATE_TWO) {
-				//still useless
-			/*
-				if(flag_rc) {
-						sendNumber(vsMsg);
-						flag_rc = false;
+				if (channel.lcol>400){																		//open gate1 to put small balls
+						Additional::additional.remoteControl(0);
 				}
-			*/
+				else if (channel.lcol<-400){                           //open gate2 to put big balls
+						Additional::additional.remoteControl(1);
+				}
+				
+				if (channel.lrow>400){                                    //open the outside gate
+						Additional::additional.remoteControl(3);
+				}
+				else if(channel.lrow<-400){                                                     //close the outside gate
+						Additional::additional.remoteControl(2);
+				}
+				
+				if (channel.rcol>400){																		//open gate1 to put small balls
+						Additional::additional.remoteControl(4);
+				}
+				else if (channel.rcol<-400){                           //open gate2 to put big balls
+						Additional::additional.remoteControl(5);
+				}
+				
+				if (channel.rrow>400){                                    //open the outside gate
+						Additional::additional.remoteControl(0);
+				}
+				else if(channel.rrow<-400){                                                     //close the outside gate
+						Additional::additional.remoteControl(6);
+				}
     }
     lastWorkState = workState;
 }
