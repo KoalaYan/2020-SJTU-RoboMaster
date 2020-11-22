@@ -23,8 +23,8 @@ void RemoteRecv::GetRemoteSwitchAction(RemoteSwitch_t *sw, uint8_t val) {
     sw->switch_value_raw = val;
     sw->switch_value_buf[sw->buf_index] = sw->switch_value_raw;
 
-    //value1 value2ֵʵһ
-    //value14λʼΪ0
+    //value1 value2的值其实是一样的
+    //value1高4位始终为0
     sw->switch_value1 = (sw->switch_value_buf[sw->buf_last_index] << 2) |
                         (sw->switch_value_buf[sw->buf_index]);
 
@@ -32,17 +32,17 @@ void RemoteRecv::GetRemoteSwitchAction(RemoteSwitch_t *sw, uint8_t val) {
 
     sw->switch_value2 = (sw->switch_value_buf[sw->buf_end_index] << 4) | sw->switch_value1;
 
-    //һûиݣ˲
+    //如果两次数据一样，即没有更新数据，拨杆不动
     if (sw->switch_value_buf[sw->buf_index] == sw->switch_value_buf[sw->buf_last_index]) {
         switch_cnt++;
     } else {
         switch_cnt = 0;
     }
-    //άһʱ䣬40֡һݣѲдswitch_long_value
+    //如果拨杆维持了一定时间，即连续来了40帧一样的数据，则把拨杆数据写入switch_long_value
     if (switch_cnt >= 40) {
         sw->switch_long_value = sw->switch_value_buf[sw->buf_index];
     }
-    //ָһ
+    //指向下一个缓冲区
     sw->buf_last_index = sw->buf_index;
     sw->buf_index++;
     if (sw->buf_index == REMOTE_SWITCH_VALUE_BUF_DEEP) {
@@ -55,19 +55,23 @@ void RemoteRecv::RemoteDataProcess(uint8_t *pData) {
 
     if (pData == NULL) return;
 
-    //ң 11*4 + 2*2 = 48Ҫ 6 Bytes
-    //16λֻ11λ
-    RC_CtrlData.rc.ch0 = ((int16_t) pData[0] | ((int16_t) pData[1] << 8)) & 0x07FF;
-    RC_CtrlData.rc.ch1 = (((int16_t) pData[1] >> 3) | ((int16_t) pData[2] << 5)) & 0x07FF;
-    RC_CtrlData.rc.ch2 = (((int16_t) pData[2] >> 6) | ((int16_t) pData[3] << 2) |
-                          ((int16_t) pData[4] << 10)) & 0x07FF;
-    RC_CtrlData.rc.ch3 = (((int16_t) pData[4] >> 1) | ((int16_t) pData[5] << 7)) & 0x07FF;
+    //遥控器 4*11bits摇杆   2*2bits开关 共48位，占用6字节
+    //16位无符号，低11位有效
+    RC_CtrlData.rc.ch0 = (*(uint32_t*)&pData[0]>>(00-(0*8)))&0x7FF;  //保持32-(22-(x*16))>11即可
+    RC_CtrlData.rc.ch1 = (*(uint32_t*)&pData[0]>>(11-(0*8)))&0x7FF;
+    RC_CtrlData.rc.ch2 = (*(uint32_t*)&pData[2]>>(22-(2*8)))&0x7FF;
+    RC_CtrlData.rc.ch3 = (*(uint32_t*)&pData[2]>>(33-(2*8)))&0x7FF;
+    //8位无符号，低2位有效
+    RC_CtrlData.rc.s1  = (*(uint32_t*)&pData[5]>>(44-(5*8)))&0x03; // 档位开关
+    RC_CtrlData.rc.s2  = (*(uint32_t*)&pData[5]>>(46-(5*8)))&0x03; // 档位开关
+    for(int i=0; i<10; i++)
+    {
+			RC_CtrlData.rc.info[i]=pData[i+6]; // 使用手机外设时
+    }
+    RC_CtrlData.rc.dial = (*(uint32_t*)&pData[16]>>(128-(16*8)))&0xFFFF;
+		
 
-    //16λֻλ
-    RC_CtrlData.rc.s1 = ((pData[5] >> 4) & 0x000C) >> 2;
-    RC_CtrlData.rc.s2 = ((pData[5] >> 4) & 0x0003);
-
-    //Ҫ 8 Bytes
+    //要 8 Bytes
     RC_CtrlData.mouse.x = ((int16_t) pData[6]) | ((int16_t) pData[7] << 8);
     RC_CtrlData.mouse.y = ((int16_t) pData[8]) | ((int16_t) pData[9] << 8);
     RC_CtrlData.mouse.z = ((int16_t) pData[10]) | ((int16_t) pData[11] << 8);
@@ -75,10 +79,10 @@ void RemoteRecv::RemoteDataProcess(uint8_t *pData) {
     RC_CtrlData.mouse.press_l = pData[12];
     RC_CtrlData.mouse.press_r = pData[13];
 
-    //Ҫ 2 Bytes = 16 bits ÿһλӦһ
+    //要 2 Bytes = 16 bits 每一位应一
     RC_CtrlData.key.v = ((int16_t) pData[14]) | ((int16_t) pData[15] << 8);
 
-    //״̬
+    //状态
     if (RC_CtrlData.rc.s2 == 1) inputMode = REMOTE_INPUT;
     else if (RC_CtrlData.rc.s2 == 3) inputMode = KEY_MOUSE_INPUT;
     else inputMode = STOP;
