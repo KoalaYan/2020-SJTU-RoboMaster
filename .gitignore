@@ -1,5 +1,5 @@
-*/cmake-build-debug
-*/build
-*/MDK-ARM/RM_frame
+cmake-build-debug
+build
+MDK-ARM/RM_frame
 *.uvguix.*
 *.lst
