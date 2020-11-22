@@ -17,7 +17,7 @@
 
 #define RC_UART                 huart1
 #define JUDGE_UART              huart3
-#define AUTOAIM_UART            huart6
+#define AUTOAIM_UART            huart5
 #define RECV_UART               huart6
 #define SERVO_UART				      huart7
 #define VISION_UART             huart7

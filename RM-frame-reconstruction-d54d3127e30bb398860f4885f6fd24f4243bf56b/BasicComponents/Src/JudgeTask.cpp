@@ -81,9 +81,9 @@ uint8_t recvMsg[8];
 
 uint8_t visionMsg[8];
 
-uint8_t numberMsg[2];
+uint8_t numberMsg[3];
 
-uint8_t number;
+//uint8_t number = 0;
 
 uint8_t recvIndex = 0;
 
@@ -127,7 +127,7 @@ void sendNumber(uint8_t number) {
 
 void VisionRxCpltCallback() {
 		//if(vsMsg >= 0 && vsMsg < 7)
-		sendNumber(vsMsg);
+		//sendNumber(vsMsg);
 		//flag_rc = true;
 		if (HAL_UART_Receive_IT(&VISION_UART, &vsMsg, 1) != HAL_OK) {
         Error_Handler();
