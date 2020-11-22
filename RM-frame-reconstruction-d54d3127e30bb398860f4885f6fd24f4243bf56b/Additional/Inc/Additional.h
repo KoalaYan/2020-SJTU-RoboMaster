@@ -14,6 +14,8 @@ public:
 		int times = 0;
 		int ang = 0;
 		int lp = 0;
+		int flag;
+		int sdnm;
 
     void Handle();
 
@@ -22,6 +24,10 @@ public:
     void setRotate();
 
     void setTargetAngle(int16_t);
+
+		void remoteControl();
+
+		void ResetFlag();
     
 };
 
